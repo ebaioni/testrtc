@@ -45,7 +45,9 @@ function RunConnectivityTest(test, iceCandidateFilter) {
 RunConnectivityTest.prototype = {
   run: function() {
     Call.asyncCreateTurnConfig(this.start.bind(this),
-        this.test.reportFatal.bind(this.test));
+        this.test.reportFatal.bind(this.test),
+        new Report(this.test)
+      );
   },
 
   start: function(config) {

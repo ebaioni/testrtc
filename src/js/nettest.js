@@ -43,7 +43,9 @@ NetworkTest.prototype = {
       this.gatherCandidates(null, this.params, this.iceCandidateFilter);
     } else {
       Call.asyncCreateTurnConfig(this.start.bind(this),
-          this.test.reportFatal.bind(this.test));
+          this.test.reportFatal.bind(this.test),
+        new Report(this.test)
+          );
     }
   },
 

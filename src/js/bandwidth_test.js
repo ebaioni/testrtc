@@ -43,7 +43,9 @@ function DataChannelThroughputTest(test, minSpeed, timeout) {
 DataChannelThroughputTest.prototype = {
   run: function() {
     Call.asyncCreateTurnConfig(this.start.bind(this),
-        this.test.reportFatal.bind(this.test));
+        this.test.reportFatal.bind(this.test),
+        new Report(this.test)
+        );
   },
 
   start: function(config) {
@@ -176,7 +178,9 @@ function VideoBandwidthTest(test, config = {}) {
 VideoBandwidthTest.prototype = {
   run: function() {
     Call.asyncCreateTurnConfig(this.start.bind(this),
-        this.test.reportFatal.bind(this.test));
+        this.test.reportFatal.bind(this.test),
+        new Report(this.test)
+      );
   },
 
   start: function(config) {
@@ -347,7 +351,9 @@ function WiFiPeriodicScanTest(test, candidateFilter) {
 WiFiPeriodicScanTest.prototype = {
   run: function() {
     Call.asyncCreateTurnConfig(this.start.bind(this),
-        this.test.reportFatal.bind(this.test));
+        this.test.reportFatal.bind(this.test),
+        new Report(this.test)
+        );
   },
 
   start: function(config) {

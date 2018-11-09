@@ -9,6 +9,7 @@
 /* global enumerateStats */
 
 function Call(config, test) {
+  var report = new Report(test);
   this.test = test;
   this.traceEvent = report.traceEventAsync('call');
   this.traceEvent({config: config});
@@ -232,7 +233,7 @@ Call.cachedIceServers_ = null;
 Call.cachedIceConfigFetchTime_ = null;
 
 // Get a TURN config, either from settings or from network traversal server.
-Call.asyncCreateTurnConfig = function(onSuccess, onError) {
+Call.asyncCreateTurnConfig = function(onSuccess, onError, report) {
   var settings = currentTest.settings;
   if (typeof(settings.turnURI) === 'string' && settings.turnURI !== '') {
     var iceServer = {
@@ -248,12 +249,12 @@ Call.asyncCreateTurnConfig = function(onSuccess, onError) {
       var config = {'iceServers': response.iceServers};
       report.traceEventInstant('turn-config', config);
       onSuccess(config);
-    }, onError);
+    }, onError, report);
   }
 };
 
 // Get a STUN config, either from settings or from network traversal server.
-Call.asyncCreateStunConfig = function(onSuccess, onError) {
+Call.asyncCreateStunConfig = function(onSuccess, onError, report) {
   var settings = currentTest.settings;
   if (typeof(settings.stunURI) === 'string' && settings.stunURI !== '') {
     var iceServer = {
@@ -267,12 +268,12 @@ Call.asyncCreateStunConfig = function(onSuccess, onError) {
       var config = {'iceServers': response.iceServers.urls};
       report.traceEventInstant('stun-config', config);
       onSuccess(config);
-    }, onError);
+    }, onError, report);
   }
 };
 
 // Ask network traversal API to give us TURN server credentials and URLs.
-Call.fetchTurnConfig_ = function(onSuccess, onError) {
+Call.fetchTurnConfig_ = function(onSuccess, onError, report) {
   // Check if credentials exist or have expired (and subtract testRuntTIme so
   // that the test can finish if near the end of the lifetime duration).
   // lifetimeDuration is in seconds.

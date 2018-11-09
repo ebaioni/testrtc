@@ -217,7 +217,7 @@ CamResolutionsTest.prototype = {
 
     // TODO: Add a reportInfo() function with a table format to display
     // values clearer.
-    report.traceEventInstant('video-stats', statsReport);
+    (new Report(this.test)).traceEventInstant('video-stats', statsReport); // Change to fit @cluey/tech-diagnostics-runner
 
     this.testExpectations_(statsReport);
   },

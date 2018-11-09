@@ -8,28 +8,31 @@
 /* exported report */
 'use strict';
 
-function Report() {
+function Report(reporter) {
+  this.reporter = reporter || { traceEvent: function() {/* no op */} };   // Injected by @cluey/tech-diagnostics-runner
   this.output_ = [];
   this.nextAsyncId_ = 0;
 
   // Hook console.log into the report, since that is the most common debug tool.
-  this.nativeLog_ = console.log.bind(console);
-  console.log = this.logHook_.bind(this);
+  // this.nativeLog_ = console.log.bind(console);
+  // console.log = this.logHook_.bind(this);
 
   // Hook up window.onerror logs into the report.
-  window.addEventListener('error', this.onWindowError_.bind(this));
+  // window.addEventListener('error', this.onWindowError_.bind(this));
 
   this.traceEventInstant('system-info', Report.getSystemInfo());
 }
 
 Report.prototype = {
   traceEventInstant: function(name, args) {
+    this.reporter.traceEvent(name, { ts: Date.now(), args: args });
     this.output_.push({'ts': Date.now(),
       'name': name,
       'args': args});
   },
 
   traceEventWithId: function(name, id, args) {
+    this.reporter.traceEvent(name, { ts: Date.now(), id: id, args: args });
     this.output_.push({'ts': Date.now(),
       'name': name,
       'id': id,
@@ -138,4 +141,4 @@ Report.getSystemInfo = function() {
     'platform': navigator.platform};
 };
 
-var report = new Report();
+// var report = new Report();
