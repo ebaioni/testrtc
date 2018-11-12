@@ -187,10 +187,10 @@ VideoBandwidthTest.prototype = {
     // tracked on: https://code.google.com/p/webrtc/issues/detail?id=3050
     this.call.disableVideoFec();
     this.call.constrainVideoBitrate(this.maxVideoBitrateKbps);
-    doGetUserMedia(this.constraints, this.gotStream.bind(this), function(error) {
+    doGetUserMedia(this.constraints, this.gotStream.bind(this), (function(error) {
       this.test.reportError('getUserMedia was rejected with a ' + error.type + ' named \'' + error.name +'\' and message \'' + error.message + '\'');
       this.test.done();
-    });
+    }).bind(this));
   },
 
   gotStream: function(stream) {
