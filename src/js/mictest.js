@@ -52,15 +52,16 @@ MicTest.prototype = {
       this.test.reportError('WebAudio is not supported, test cannot run.');
       this.test.done();
     } else {
-      doGetUserMedia(this.constraints, this.gotStream.bind(this), function(error) {
+      doGetUserMedia(this.constraints, this.gotStream.bind(this), (function(error) {
         this.test.reportError('getUserMedia was rejected with a ' + error.type + ' named \'' + error.name +'\' and message \'' + error.message + '\'');
         this.test.done();
-      });
+      }).bind(this));
     }
   },
 
   gotStream: function(stream) {
     if (!this.checkAudioTracks(stream)) {
+      stream.getTracks().forEach(function(track) { track.stop(); })
       this.test.done();
       return;
     }
@@ -126,6 +127,7 @@ MicTest.prototype = {
 
   onStopCollectingAudio: function() {
     this.stream.getAudioTracks()[0].stop();
+    this.stream.getTracks().forEach(function(track) { track.stop(); });
     this.audioSource.disconnect(this.scriptNode);
     this.scriptNode.disconnect(audioContext.destination);
     this.analyzeAudio(this.collectedAudio);

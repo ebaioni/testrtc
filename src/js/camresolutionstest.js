@@ -97,6 +97,7 @@ CamResolutionsTest.prototype = {
 
   maybeContinueGetUserMedia: function() {
     if (this.currentResolution === this.resolutions.length) {
+      stream.getTracks().forEach(function (track) { track.stop(); });
       this.test.done();
       return;
     }
@@ -169,6 +170,7 @@ CamResolutionsTest.prototype = {
 
     frameChecker.stop();
 
+    stream.getTracks().forEach(function (track) { track.stop(); });
     this.test.done();
   },
 
