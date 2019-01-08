@@ -42,24 +42,32 @@ function MicTest(test) {
   this.collectedAudio = [];
   this.collectedSampleCount = 0;
   for (var i = 0; i < this.inputChannelCount; ++i) {
+    console.log('collected audio');
     this.collectedAudio[i] = [];
   }
+
+  window.enrico = this;
 }
 
 MicTest.prototype = {
   run: function() {
-    if (typeof audioContext === 'undefined') {
+    if (typeof audioContext === 'undefined' && (window.AudioContext || window.webkitAudioContext)) {
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.test.reportInfo('audio context recreated');
+      audioContext = new AudioContext();
+    } else if (typeof audioContext === 'undefined') {
       this.test.reportError('WebAudio is not supported, test cannot run.');
       this.test.done();
-    } else {
-      audioContext.resume().then(() => {
-        console.log('resumed inside test');
-        doGetUserMedia(this.constraints, this.gotStream.bind(this), (function(error) {
-          this.test.reportError('getUserMedia was rejected with a ' + error.type + ' named \'' + error.name +'\' and message \'' + error.message + '\'');
-          this.test.done();
-        }).bind(this));
-      }).catch(console.error);
+      return;
     }
+    audioContext.resume().then(() => {
+      this.test.reportInfo('audio context resumed inside the test');
+      doGetUserMedia(this.constraints, this.gotStream.bind(this), (function(error) {
+        this.test.reportError('getUserMedia was rejected with a ' + error.type + ' named \'' + error.name +'\' and message \'' + error.message + '\'');
+        this.test.done();
+      }).bind(this));
+    }).catch(console.error);
+    // }
   },
 
   gotStream: function(stream) {
