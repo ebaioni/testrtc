@@ -42,11 +42,9 @@ function MicTest(test) {
   this.collectedAudio = [];
   this.collectedSampleCount = 0;
   for (var i = 0; i < this.inputChannelCount; ++i) {
-    console.log('collected audio');
     this.collectedAudio[i] = [];
   }
 
-  window.enrico = this;
 }
 
 MicTest.prototype = {
