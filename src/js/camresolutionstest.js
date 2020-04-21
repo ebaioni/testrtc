@@ -47,12 +47,13 @@ addTest(testSuiteName.CAMERA,
       camResolutionsTest.run();
     });
 
-function CamResolutionsTest(test, resolutions) {
+function CamResolutionsTest(test, resolutions, stopTracks = true) {
   this.test = test;
   this.resolutions = resolutions;
   this.currentResolution = 0;
   this.isMuted = false;
   this.isShuttingDown = false;
+  this.stopTracks = stopTracks;
 }
 
 CamResolutionsTest.prototype = {
@@ -75,9 +76,12 @@ CamResolutionsTest.prototype = {
           if (this.resolutions.length > 1) {
             this.test.reportSuccess('Supported: ' + resolution[0] + 'x' +
             resolution[1]);
-            stream.getTracks().forEach(function(track) {
-              track.stop();
-            });
+            if (this.stopTracks) {
+              stream.getTracks().forEach(function(track) {
+                track.stop();
+              });
+            }
+            
             this.maybeContinueGetUserMedia();
           } else {
             this.collectAndAnalyzeStats_(stream, resolution);
@@ -97,7 +101,9 @@ CamResolutionsTest.prototype = {
 
   maybeContinueGetUserMedia: function() {
     if (this.currentResolution === this.resolutions.length) {
-      stream.getTracks().forEach(function (track) { track.stop(); });
+      if (this.stopTracks) {
+        stream.getTracks().forEach(function (track) { track.stop(); });
+      }
       this.test.done();
       return;
     }
@@ -169,8 +175,9 @@ CamResolutionsTest.prototype = {
         stats, statsTime);
 
     frameChecker.stop();
-
-    stream.getTracks().forEach(function (track) { track.stop(); });
+    if (this.stopTracks) {
+      stream.getTracks().forEach(function (track) { track.stop(); });
+    }
     this.test.done();
   },
 
@@ -226,9 +233,12 @@ CamResolutionsTest.prototype = {
 
   endCall_: function(callObject, stream) {
     this.isShuttingDown = true;
-    stream.getTracks().forEach(function(track) {
-      track.stop();
-    });
+    if (this.stopTracks) {
+      stream.getTracks().forEach(function(track) {
+          track.stop();
+      });
+    }
+    
     callObject.close();
   },
 
