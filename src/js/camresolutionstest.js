@@ -75,13 +75,13 @@ CamResolutionsTest.prototype = {
           // provided.
           if (this.resolutions.length > 1) {
             this.test.reportSuccess('Supported: ' + resolution[0] + 'x' +
-            resolution[1]);
+                resolution[1]);
             if (this.stopTracks) {
               stream.getTracks().forEach(function(track) {
                 track.stop();
               });
             }
-            
+
             this.maybeContinueGetUserMedia();
           } else {
             this.collectAndAnalyzeStats_(stream, resolution);
@@ -90,7 +90,7 @@ CamResolutionsTest.prototype = {
         .catch(function(error) {
           if (this.resolutions.length > 1) {
             this.test.reportInfo(resolution[0] + 'x' + resolution[1] +
-            ' not supported');
+                ' not supported');
           } else {
             this.test.reportError('getUserMedia failed with error: ' +
                 error.name);
@@ -101,9 +101,9 @@ CamResolutionsTest.prototype = {
 
   maybeContinueGetUserMedia: function() {
     if (this.currentResolution === this.resolutions.length) {
-      if (this.stopTracks) {
-        stream.getTracks().forEach(function (track) { track.stop(); });
-      }
+      // if (this.stopTracks) {
+      //   stream.getTracks().forEach(function (track) { track.stop(); });
+      // }
       this.test.done();
       return;
     }
@@ -170,7 +170,7 @@ CamResolutionsTest.prototype = {
   },
 
   onCallEnded_: function(resolution, videoElement, stream, frameChecker,
-    stats, statsTime) {
+                         stats, statsTime) {
     this.analyzeStats_(resolution, videoElement, stream, frameChecker,
         stats, statsTime);
 
@@ -182,7 +182,7 @@ CamResolutionsTest.prototype = {
   },
 
   analyzeStats_: function(resolution, videoElement, stream,
-    frameChecker, stats, statsTime) {
+                          frameChecker, stats, statsTime) {
     var googAvgEncodeTime = [];
     var googAvgFrameRateInput = [];
     var googAvgFrameRateSent = [];
@@ -235,10 +235,10 @@ CamResolutionsTest.prototype = {
     this.isShuttingDown = true;
     if (this.stopTracks) {
       stream.getTracks().forEach(function(track) {
-          track.stop();
+        track.stop();
       });
     }
-    
+
     callObject.close();
   },
 
@@ -254,11 +254,11 @@ CamResolutionsTest.prototype = {
   },
 
   resolutionMatchesIndependentOfRotationOrCrop_: function(aWidth, aHeight,
-    bWidth, bHeight) {
+                                                          bWidth, bHeight) {
     var minRes = Math.min(bWidth, bHeight);
     return (aWidth === bWidth && aHeight === bHeight) ||
-           (aWidth === bHeight && aHeight === bWidth) ||
-           (aWidth === minRes && bHeight === minRes);
+        (aWidth === bHeight && aHeight === bWidth) ||
+        (aWidth === minRes && bHeight === minRes);
   },
 
   testExpectations_: function(info) {
@@ -302,4 +302,3 @@ CamResolutionsTest.prototype = {
     }
   }
 };
-
