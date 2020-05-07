@@ -137,8 +137,17 @@ MicTest.prototype = {
   onStopCollectingAudio: function() {
     this.stream.getAudioTracks()[0].stop();
     this.stream.getTracks().forEach(function(track) { track.stop(); });
-    this.audioSource.disconnect(this.scriptNode);
-    this.scriptNode.disconnect(audioContext.destination);
+    try {
+      this.audioSource.disconnect(this.scriptNode);
+    } catch (e) {
+      console.debug(e);
+    }
+    try {
+      this.scriptNode.disconnect(audioContext.destination);
+    } catch (e) {
+      console.debug(e);
+    }
+
     this.analyzeAudio(this.collectedAudio);
     this.test.done();
   },
