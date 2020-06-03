@@ -27,6 +27,7 @@ CamFrameTest.prototype = {
                 .catch(function(error) {
                     this.test.reportError('getUserMedia failed with error: ' +
                         error.name);
+                    this.test.done();
                 }.bind(this));
         } else {
             this.collectAndAnalyzeStats_(this.mediastream);
@@ -76,18 +77,22 @@ CamFrameTest.prototype = {
         console.log('frameStats', frameStats);
         if (frameStats.numFrames === 0) {
             this.test.reportError('Could not analyze any video frame.');
+            this.test.done();
             return;
         }
         const passNumber = Math.floor(this.thresholdPass *  frameStats.numFrames / 100);
         console.log('passnumber', passNumber);
         if (frameStats.numBlackFrames > passNumber) {
             this.test.reportError('Camera delivering lots of black frames.');
+            this.test.done();
             return;
         }
         if (frameStats.numFrozenFrames > frameStats.numFrames / 3) {
             this.test.reportError('Camera delivering lots of frozen frames.');
+            this.test.done();
             return;
         }
-        this.test.reportSuccess('All good')
+        this.test.reportSuccess('All good');
+        this.test.done();
     },
 };
