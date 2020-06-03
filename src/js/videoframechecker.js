@@ -24,12 +24,16 @@ function VideoFrameChecker(videoElement) {
   this.canvas_ = document.createElement('canvas');
   this.videoElement_ = videoElement;
   this.listener_ = this.checkVideoFrame_.bind(this);
-  this.videoElement_.addEventListener('play', this.listener_, false);
+  this.listener_();
+  // this.videoElement_.addEventListener('play', () => {
+  //   console.log('play');
+  //   this.listener_();
+  // }, false);
 }
 
 VideoFrameChecker.prototype = {
   stop: function() {
-    this.videoElement_.removeEventListener('play' , this.listener_);
+    // this.videoElement_.removeEventListener('play' , this.listener_);
     this.running_ = false;
   },
 
