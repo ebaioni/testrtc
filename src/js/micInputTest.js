@@ -43,6 +43,7 @@ MicInputTest.prototype = {
                 }.bind(this));
         } else {
             this.init();
+            console.log('this.audiocontext', this.audioCtx);
             this.collectAndAnalyzeStats_(this.mediastream);
         }
     },
