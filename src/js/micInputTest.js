@@ -43,6 +43,7 @@ MicInputTest.prototype = {
                 }.bind(this));
         } else {
             this.init();
+            console.log('this.audiocontext', this.audioCtx);
             this.collectAndAnalyzeStats_(this.mediastream);
         }
     },
@@ -86,7 +87,7 @@ MicInputTest.prototype = {
         const average = Math.round((values / (newData.length || 1)) * 0.75);
         this.averages.push(average);
         this.test.reportInfo(`average: ${average}`);
-        if (this.averages.length > 100) {
+        if (this.averages.length === this.sampleNumber) {
             if (this.requestId) {
                 cancelAnimationFrame(this.requestId);
                 this.requestId = null;
