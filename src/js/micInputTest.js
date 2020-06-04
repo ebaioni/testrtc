@@ -21,6 +21,11 @@ MicInputTest.prototype = {
         this.analyser.smoothingTimeConstant = 0.85;
     },
     run: function() {
+        if (this.audioCtx) {
+            console.log('closing prev audio');
+            this.audioCtx.close();
+            this.audioCtx = null;
+        }
         this.startGetUserMedia();
     },
 
